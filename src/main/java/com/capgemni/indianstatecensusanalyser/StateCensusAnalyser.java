@@ -21,6 +21,7 @@ public class StateCensusAnalyser {
 			throw new CensusAnalyserException("File type is not correct",ExceptionType.FILE_TYPE_INCORRECT);
 		}
 		
+		checkForWrongDelimiter(csvFilePath);
 		try {
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
 			CsvToBean<CSVStateCensus> csvToBean=new CsvToBeanBuilder(reader).withType(CSVStateCensus.class)
@@ -35,6 +36,21 @@ public class StateCensusAnalyser {
 			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
 		}
 		
+	}
+	
+	public void checkForWrongDelimiter(String csvFilePath) throws CensusAnalyserException{
+		try {
+		  BufferedReader br=Files.newBufferedReader(Paths.get(csvFilePath));
+		  String line;
+		  while((line=br.readLine())!=null) {
+			  String[] lineComponents=line.split(",");
+			  if(lineComponents.length!=4)
+				  throw new CensusAnalyserException("This file is having incorrect delimiter",ExceptionType.DELIMITER_INCORRECT);
+		  }
+		}
+		catch(IOException e) {
+			throw new CensusAnalyserException("This file path is incorrect",ExceptionType.FILE_INCORRECT);
+		}
 	}
 	
 }
