@@ -32,5 +32,17 @@ public class StateCensusAnalyserTester {
 			assertEquals(ExceptionType.FILE_INCORRECT,e.getExceptionType());
 		}
 	}
+	
+	@Test
+	public void ForIncorrectFileTypeShouldThrowException() {
+		try {
+			String csvFilePath="./StateCensusData.txt";
+			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+			stateCensusAnalyser.loadCSVData(csvFilePath);
+		}
+		catch(CensusAnalyserException e) {
+			assertEquals(ExceptionType.FILE_TYPE_INCORRECT,e.getExceptionType());
+		}
+	}
 
 }
