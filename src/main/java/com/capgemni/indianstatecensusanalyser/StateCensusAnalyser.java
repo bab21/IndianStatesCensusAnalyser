@@ -28,10 +28,5 @@ public class StateCensusAnalyser {
 		}
 		return numOfEntries;
 	}
-	public static void main(String[] args) {
-		String csvFilePath="./StateCensusData.csv";
-		StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
-		int numOfEntries = stateCensusAnalyser.loadCSVData(csvFilePath);
-		System.out.println("Number of Entries in file = "+numOfEntries);
-	}
+	
 }
