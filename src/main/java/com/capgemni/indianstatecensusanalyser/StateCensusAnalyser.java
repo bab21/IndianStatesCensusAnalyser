@@ -7,12 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
+
+import com.capgemni.indianstatecensusanalyser.CensusAnalyserException.ExceptionType;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 public class StateCensusAnalyser {
 	
-	public int loadCSVData(String csvFilePath) {
+	public int loadCSVData(String csvFilePath) throws CensusAnalyserException{
 		int numOfEntries=0;
 		try {
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
@@ -24,7 +26,7 @@ public class StateCensusAnalyser {
 			numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
 		}
 		catch(IOException e) {
-			e.printStackTrace();
+			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
 		}
 		return numOfEntries;
 	}
