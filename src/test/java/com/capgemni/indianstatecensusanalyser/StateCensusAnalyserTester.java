@@ -55,6 +55,17 @@ public class StateCensusAnalyserTester {
 			assertEquals(ExceptionType.DELIMITER_INCORRECT,e.getExceptionType());
 		}
 	}
+	@Test
+	public void ForFileWithIncorrectHeaderShouldThrowException() {
+		try {
+			String csvFilePath="./StateCensusDataIncorrectHeader.csv";
+			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+			stateCensusAnalyser.loadCSVData(csvFilePath);
+		}
+		catch(CensusAnalyserException e) {
+			assertEquals(ExceptionType.HEADER_INCORRECT,e.getExceptionType());
+		}
+	}
 	
 	
 

@@ -22,6 +22,7 @@ public class StateCensusAnalyser {
 		}
 		
 		checkForWrongDelimiter(csvFilePath);
+		checkForIncorrectHeader(csvFilePath);
 		try {
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
 			CsvToBean<CSVStateCensus> csvToBean=new CsvToBeanBuilder(reader).withType(CSVStateCensus.class)
@@ -51,6 +52,19 @@ public class StateCensusAnalyser {
 		catch(IOException e) {
 			throw new CensusAnalyserException("This file path is incorrect",ExceptionType.FILE_INCORRECT);
 		}
+	}
+	
+	public void checkForIncorrectHeader(String csvFilePath) throws CensusAnalyserException{
+		try {
+			  BufferedReader br=Files.newBufferedReader(Paths.get(csvFilePath));
+			  String headerLine=br.readLine();
+			  String[] headerLineValues=headerLine.split(",");
+			  if(!(headerLineValues[0].equals("State") && headerLineValues[1].equals("Population") && headerLineValues[2].equals("AreaInSqKm") && headerLineValues[3].equals("DensityPerSqKm")))
+				  throw new CensusAnalyserException("File headers are not correct",ExceptionType.HEADER_INCORRECT);
+			}
+			catch(IOException e) {
+				throw new CensusAnalyserException("This file path is incorrect",ExceptionType.FILE_INCORRECT);
+			}
 	}
 	
 }
