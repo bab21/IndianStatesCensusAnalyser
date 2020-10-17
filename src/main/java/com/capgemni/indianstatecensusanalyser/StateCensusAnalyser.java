@@ -31,12 +31,9 @@ public class StateCensusAnalyser {
 			
 		}
 		try {
-			int numOfEntries=0;
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
-			Iterator<CSVStateCensus> censusCSVIterator = this.getCSVFileIterator(reader, CSVStateCensus.class);
-			Iterable<CSVStateCensus> csvIterable = () -> censusCSVIterator;
-			numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
-			return numOfEntries;
+			Iterator<CSVStateCensus> csvIterator = this.getCSVFileIterator(reader, CSVStateCensus.class);
+			return this.getCount(csvIterator);
 		}
 		catch(IOException e) {
 			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
@@ -61,12 +58,9 @@ public class StateCensusAnalyser {
 			
 		}
 		try {
-			int numOfEntries=0;
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
-			Iterator<CSVStateCode> censusCSVIterator = this.getCSVFileIterator(reader,CSVStateCode.class);
-			Iterable<CSVStateCode> csvIterable = () -> censusCSVIterator;
-			numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
-			return numOfEntries;
+			Iterator<CSVStateCode> csvIterator = this.getCSVFileIterator(reader,CSVStateCode.class);
+			return this.getCount(csvIterator);
 		}
 		catch(IOException e) {
 			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
@@ -81,6 +75,12 @@ public class StateCensusAnalyser {
 		return csvToBean.iterator();
 	}
 	
+	private <E> int getCount(Iterator<E> iterator) {
+		int numOfEntries=0;
+		Iterable<E> csvIterable = () -> iterator;
+		numOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
+		return numOfEntries;
+	}
 		
 	private boolean checkFileExtention(String csvFilePath) {
 		String[] filePathComponents=csvFilePath.split("[.]");
