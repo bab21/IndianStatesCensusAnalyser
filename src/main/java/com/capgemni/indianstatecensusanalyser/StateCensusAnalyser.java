@@ -32,8 +32,8 @@ public class StateCensusAnalyser {
 		}
 		try {
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
-			Iterator<CSVStateCensus> csvIterator = new OpenCSVBuilder()
-					                              .getCSVFileIterator(reader, CSVStateCensus.class);
+			ICSVBuilder csvBuilder=CSVBuilderFactory.createCSVBuilder();
+			Iterator<CSVStateCensus> csvIterator = csvBuilder.getCSVFileIterator(reader, CSVStateCensus.class);
 			return this.getCount(csvIterator);
 		}
 		catch(IOException e) {
@@ -60,8 +60,8 @@ public class StateCensusAnalyser {
 		}
 		try {
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
-			Iterator<CSVStateCode> csvIterator = new OpenCSVBuilder()
-					                            .getCSVFileIterator(reader,CSVStateCode.class);
+			ICSVBuilder csvBuilder=CSVBuilderFactory.createCSVBuilder();
+			Iterator<CSVStateCode> csvIterator = csvBuilder.getCSVFileIterator(reader,CSVStateCode.class);
 			return this.getCount(csvIterator);
 		}
 		catch(IOException e) {
