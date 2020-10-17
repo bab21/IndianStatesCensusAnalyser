@@ -67,6 +67,65 @@ public class StateCensusAnalyserTester {
 		}
 	}
 	
+	@Test
+	public void loadStateCodeDataFromCsvShouldReturnCorrectNumberOfEntries() {
+		try {
+		String csvFilePath="./IndianStateCodeData.csv";
+		StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+		int numOfEntries = stateCensusAnalyser.loadStateCodeData(csvFilePath);
+		assertEquals(36,numOfEntries);
+		}
+		catch(CensusAnalyserException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void ForIncorrectStateCodeFileShouldThrowException() {
+		try {
+			String csvFilePath="./IndianStateCodeDataa.csv";
+			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+			stateCensusAnalyser.loadStateCodeData(csvFilePath);
+		}
+		catch(CensusAnalyserException e) {
+			assertEquals(ExceptionType.FILE_INCORRECT,e.getExceptionType());
+		}
+	}
+	
+	@Test
+	public void ForIncorrectStateCodeFileTypeShouldThrowException() {
+		try {
+			String csvFilePath="./IndianStateCodeData.txt";
+			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+			stateCensusAnalyser.loadStateCodeData(csvFilePath);
+		}
+		catch(CensusAnalyserException e) {
+			assertEquals(ExceptionType.FILE_TYPE_INCORRECT,e.getExceptionType());
+		}
+	}
+	
+	@Test
+	public void ForStateCodeFileWithIncorrectDelimiterShouldThrowException() {
+		try {
+			String csvFilePath="./IndianStateCodeDataIncorrectDelimiter.csv";
+			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+			stateCensusAnalyser.loadStateCodeData(csvFilePath);
+		}
+		catch(CensusAnalyserException e) {
+			assertEquals(ExceptionType.DELIMITER_INCORRECT,e.getExceptionType());
+		}
+	}
+	@Test
+	public void ForStateCodeFileWithIncorrectHeaderShouldThrowException() {
+		try {
+			String csvFilePath="./IndianStateCodeDataIncorrectHeader.csv";
+			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
+			stateCensusAnalyser.loadStateCodeData(csvFilePath);
+		}
+		catch(CensusAnalyserException e) {
+			assertEquals(ExceptionType.HEADER_INCORRECT,e.getExceptionType());
+		}
+	}
 	
 
 }
