@@ -39,6 +39,9 @@ public class StateCensusAnalyser {
 		catch(IOException e) {
 			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
 		}
+		catch(CSVBuilderException e) {
+			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
+		}
 		
 	}
 	
@@ -65,6 +68,9 @@ public class StateCensusAnalyser {
 			return this.getCount(csvIterator);
 		}
 		catch(IOException e) {
+			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
+		}
+		catch(CSVBuilderException e) {
 			throw new CensusAnalyserException("File path is not correct",ExceptionType.FILE_INCORRECT);
 		}
 		
