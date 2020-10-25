@@ -156,6 +156,13 @@ public class StateCensusAnalyserTester {
         assertEquals("Ladakh",returnedList.get(returnedList.size()-1).state);
 		
 	}
+	
+	@Test
+	public void GivenCensusCSVData_WhenSortedAccordingToArea_ShouldReturnSortedList() {
+		List<CSVStateCensus> returnedList=stateCensusAnalyser.sortStateCensusDataAccordingToArea("./StateCensusData.csv");
+        assertEquals("Rajasthan",returnedList.get(0).state);
+        assertEquals("Lakshadweep",returnedList.get(returnedList.size()-1).state);
+	}
 
 	
 

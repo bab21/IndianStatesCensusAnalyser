@@ -25,6 +25,7 @@ public class StateCensusAnalyser {
 	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATECODE="./sortedStateCodeCensusAccordingToStateCode.json";
 	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_POPULATION = "./sortedStateCensusAccordingToPopulation.json";
 	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_POPULATIONDENSITY = "./sortedStateCensusAccordingToPopulationDensity.json";
+	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_AREA = "./sortedStateCensusAccordingToArea.json";
 	
 	public int loadCSVData(String csvFilePath) throws CensusAnalyserException{
 		if(!this.checkFileExtention(csvFilePath)) {
@@ -130,6 +131,35 @@ public class StateCensusAnalyser {
 		
 		try {
 			writer = new FileWriter(JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_POPULATIONDENSITY);
+			writer.write(json);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sortedList;
+	}
+	
+	public List<CSVStateCensus> sortStateCensusDataAccordingToArea(String csvFilePath){
+		
+		Reader reader=null;
+		try {
+			reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		CSVStateDataList = new CsvToBeanBuilder(reader).withType(CSVStateCensus.class).build().parse();
+		List<CSVStateCensus> sortedList = CSVStateDataList.stream()
+				.sorted((element1, element2) ->Integer.compare(element1.areaInSqKm,element2.areaInSqKm))
+				.collect(Collectors.toList());
+		Collections.reverse(sortedList);
+		
+		Gson gson=new Gson();
+		String json=gson.toJson(sortedList);
+		FileWriter writer;
+		
+		try {
+			writer = new FileWriter(JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_AREA);
 			writer.write(json);
 			writer.close();
 		} catch (IOException e) {
