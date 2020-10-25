@@ -14,7 +14,7 @@ public class StateCensusAnalyserTester {
 		String csvFilePath="./StateCensusData.csv";
 		StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 		int numOfEntries = stateCensusAnalyser.loadCSVData(csvFilePath);
-		assertEquals(36,numOfEntries);
+		assertEquals(37,numOfEntries);
 		}
 		catch(CensusAnalyserException e) {
 			e.printStackTrace();
