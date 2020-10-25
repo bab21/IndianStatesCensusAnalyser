@@ -12,6 +12,8 @@ import com.capgemni.indianstatecensusanalyser.CensusAnalyserException.ExceptionT
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
+
+
 public class StateCensusAnalyser {
 	
 	public int loadCSVData(String csvFilePath) throws CensusAnalyserException{
