@@ -149,5 +149,14 @@ public class StateCensusAnalyserTester {
 		
 	}
 	
+	@Test
+	public void GivenCensusCSVData_WhenSortedAccordingToPopulationDensity_ShouldReturnSortedList() {
+		List<CSVStateCensus> returnedList=stateCensusAnalyser.sortStateCensusDataAccordingToPopulationDensity("./StateCensusData.csv");
+	    assertEquals("Delhi",returnedList.get(0).state);
+        assertEquals("Ladakh",returnedList.get(returnedList.size()-1).state);
+		
+	}
+
+	
 
 }
