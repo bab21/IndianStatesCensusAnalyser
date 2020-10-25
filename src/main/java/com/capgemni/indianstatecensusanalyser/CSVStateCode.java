@@ -9,7 +9,7 @@ public class CSVStateCode {
 	@CsvBindByName(column="Population")
 	public int population;
 	@CsvBindByName(column="State Code")
-	public int stateCode;
+	public String stateCode;
 	
 	@Override
 	public String toString() {

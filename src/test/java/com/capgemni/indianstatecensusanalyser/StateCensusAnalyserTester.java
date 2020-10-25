@@ -133,5 +133,13 @@ public class StateCensusAnalyserTester {
 		
 	}
 	
+	@Test
+	public void GivenCensusCSVData_WhenSortedAccordingToStateCode_ShouldReturnSortedList() {
+		List<CSVStateCode> returnedList=stateCensusAnalyser.sortStateCodeCensusDataAccordingToStateCode("./IndianStateCodeData.csv");
+		assertEquals("AN",returnedList.get(0).stateCode);
+     	assertEquals("WB",returnedList.get(returnedList.size()-1).stateCode);
+		
+	}
+	
 
 }
