@@ -141,5 +141,13 @@ public class StateCensusAnalyserTester {
 		
 	}
 	
+	@Test
+	public void GivenCensusCSVData_WhenSortedAccordingToPopulation_ShouldReturnSortedList() {
+		List<CSVStateCensus> returnedList=stateCensusAnalyser.sortStateCensusDataAccordingToPopulation("./StateCensusData.csv");
+		assertEquals("Uttar Pradesh",returnedList.get(0).state);
+		assertEquals("Lakshadweep",returnedList.get(returnedList.size()-1).state);
+		
+	}
+	
 
 }

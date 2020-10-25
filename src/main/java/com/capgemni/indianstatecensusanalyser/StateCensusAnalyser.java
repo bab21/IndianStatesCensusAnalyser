@@ -23,6 +23,7 @@ public class StateCensusAnalyser {
 	public  List<CSVStateCode> CSVStateCodeDataList;
 	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATENAME = "./sortedStateCensusAccordingToState.json";
 	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATECODE="./sortedStateCodeCensusAccordingToStateCode.json";
+	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_POPULATION = "./sortedStateCensusAccordingToPopulation.json";
 	
 	public int loadCSVData(String csvFilePath) throws CensusAnalyserException{
 		if(!this.checkFileExtention(csvFilePath)) {
@@ -79,34 +80,63 @@ public class StateCensusAnalyser {
 		return sortedList;
 	}
 	
-	public List<CSVStateCode> sortStateCodeCensusDataAccordingToStateCode(String csvFilePath){
-			
-			Reader reader=null;
-			try {
-				reader = Files.newBufferedReader(Paths.get(csvFilePath));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			
-			CSVStateCodeDataList = new CsvToBeanBuilder(reader).withType(CSVStateCode.class).build().parse();
-			List<CSVStateCode> sortedList = CSVStateCodeDataList.stream()
-					.sorted((element1, element2) ->element1.stateCode.compareTo(element2.stateCode))
-					.collect(Collectors.toList());
-			
-			Gson gson=new Gson();
-			String json=gson.toJson(sortedList);
-			FileWriter writer;
-			
-			try {
-				writer = new FileWriter(JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATENAME);
-				writer.write(json);
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.out.println(sortedList);
-			return sortedList;
+	public List<CSVStateCensus> sortStateCensusDataAccordingToPopulation(String csvFilePath){
+		
+		Reader reader=null;
+		try {
+			reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+		
+		CSVStateDataList = new CsvToBeanBuilder(reader).withType(CSVStateCensus.class).build().parse();
+		List<CSVStateCensus> sortedList = CSVStateDataList.stream()
+				.sorted((element1, element2) ->Integer.compare(element1.population,element2.population))
+				.collect(Collectors.toList());
+		Collections.reverse(sortedList);
+		
+		Gson gson=new Gson();
+		String json=gson.toJson(sortedList);
+		FileWriter writer;
+		
+		try {
+			writer = new FileWriter(JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_POPULATION);
+			writer.write(json);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(sortedList);
+		return sortedList;
+	}
+	
+	public List<CSVStateCode> sortStateCodeCensusDataAccordingToStateCode(String csvFilePath){
+		
+		Reader reader=null;
+		try {
+			reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		CSVStateCodeDataList = new CsvToBeanBuilder(reader).withType(CSVStateCode.class).build().parse();
+		List<CSVStateCode> sortedList = CSVStateCodeDataList.stream()
+				.sorted((element1, element2) ->element1.stateCode.compareTo(element2.stateCode))
+				.collect(Collectors.toList());
+		
+		Gson gson=new Gson();
+		String json=gson.toJson(sortedList);
+		FileWriter writer;
+		
+		try {
+			writer = new FileWriter(JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATENAME);
+			writer.write(json);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sortedList;
+	}
 	
 	
 	public int loadStateCodeData(String csvFilePath) throws CensusAnalyserException{
