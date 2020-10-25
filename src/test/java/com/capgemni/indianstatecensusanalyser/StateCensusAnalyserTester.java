@@ -2,17 +2,24 @@ package com.capgemni.indianstatecensusanalyser;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import com.capgemni.indianstatecensusanalyser.CensusAnalyserException.ExceptionType;
 
 public class StateCensusAnalyserTester {
+	public static StateCensusAnalyser stateCensusAnalyser;
+	@Before
+	public void setUp() {
+	    stateCensusAnalyser =new StateCensusAnalyser();
+	}
 
 	@Test
 	public void loadDataFromCsvShouldReturnCorrectNumberOfEntries() {
 		try {
 		String csvFilePath="./StateCensusData.csv";
-		StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 		int numOfEntries = stateCensusAnalyser.loadCSVData(csvFilePath);
 		assertEquals(36,numOfEntries);
 		}
@@ -25,7 +32,6 @@ public class StateCensusAnalyserTester {
 	public void ForIncorrectFileShouldThrowException() {
 		try {
 			String csvFilePath="./StateCensusDataaa.csv";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadCSVData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -37,7 +43,6 @@ public class StateCensusAnalyserTester {
 	public void ForIncorrectFileTypeShouldThrowException() {
 		try {
 			String csvFilePath="./StateCensusData.txt";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadCSVData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -48,7 +53,6 @@ public class StateCensusAnalyserTester {
 	public void ForFileWithIncorrectDelimiterShouldThrowException() {
 		try {
 			String csvFilePath="./StateCensusDataIncorrectDelimiter.csv";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadCSVData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -59,7 +63,6 @@ public class StateCensusAnalyserTester {
 	public void ForFileWithIncorrectHeaderShouldThrowException() {
 		try {
 			String csvFilePath="./StateCensusDataIncorrectHeader.csv";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadCSVData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -71,7 +74,6 @@ public class StateCensusAnalyserTester {
 	public void loadStateCodeDataFromCsvShouldReturnCorrectNumberOfEntries() {
 		try {
 		String csvFilePath="./IndianStateCodeData.csv";
-		StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 		int numOfEntries = stateCensusAnalyser.loadStateCodeData(csvFilePath);
 		assertEquals(36,numOfEntries);
 		}
@@ -84,7 +86,6 @@ public class StateCensusAnalyserTester {
 	public void ForIncorrectStateCodeFileShouldThrowException() {
 		try {
 			String csvFilePath="./IndianStateCodeDataa.csv";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadStateCodeData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -96,7 +97,6 @@ public class StateCensusAnalyserTester {
 	public void ForIncorrectStateCodeFileTypeShouldThrowException() {
 		try {
 			String csvFilePath="./IndianStateCodeData.txt";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadStateCodeData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -108,7 +108,6 @@ public class StateCensusAnalyserTester {
 	public void ForStateCodeFileWithIncorrectDelimiterShouldThrowException() {
 		try {
 			String csvFilePath="./IndianStateCodeDataIncorrectDelimiter.csv";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadStateCodeData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
@@ -119,12 +118,19 @@ public class StateCensusAnalyserTester {
 	public void ForStateCodeFileWithIncorrectHeaderShouldThrowException() {
 		try {
 			String csvFilePath="./IndianStateCodeDataIncorrectHeader.csv";
-			StateCensusAnalyser stateCensusAnalyser =new StateCensusAnalyser();
 			stateCensusAnalyser.loadStateCodeData(csvFilePath);
 		}
 		catch(CensusAnalyserException e) {
 			assertEquals(ExceptionType.HEADER_INCORRECT,e.getExceptionType());
 		}
+	}
+	
+	@Test
+	public void GivenCensusCSVData_WhenSortedAccordingToStateName_ShouldReturnSortedList() {
+		List<CSVStateCensus> returnedList=stateCensusAnalyser.sortStateCensusDataAccordingToStateInAlphabeticalOrder("./StateCensusData.csv");
+		assertEquals("Andaman and Nicobar Islands",returnedList.get(0).state);
+		assertEquals("West Bengal",returnedList.get(returnedList.size()-1).state);
+		
 	}
 	
 

@@ -1,27 +1,30 @@
 package com.capgemni.indianstatecensusanalyser;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-
 import com.capgemni.indianstatecensusanalyser.CensusAnalyserException.ExceptionType;
+import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-
-
+import com.google.gson.Gson;
 
 
 public class StateCensusAnalyser {
+	public  List<CSVStateCensus> CSVStateDataList;
+	public  List<CSVStateCode> CSVStateCodeDataList;
+	private static final String JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATENAME = "./sortedStateCensusAccordingToState.json";
+	
 	
 	public int loadCSVData(String csvFilePath) throws CensusAnalyserException{
-		List<CSVStateCensus> CSVStateDataList;
-		
 		if(!this.checkFileExtention(csvFilePath)) {
 			throw new CensusAnalyserException("File type is not correct",ExceptionType.FILE_TYPE_INCORRECT);
 		}
@@ -40,6 +43,7 @@ public class StateCensusAnalyser {
 		try {
 			Reader reader=Files.newBufferedReader(Paths.get(csvFilePath));
 			CSVStateDataList = new CsvToBeanBuilder(reader).withType(CSVStateCensus.class).build().parse();
+			System.out.println(CSVStateDataList);
 			return CSVStateDataList.size();
 		}
 		catch(IOException e) {
@@ -48,10 +52,36 @@ public class StateCensusAnalyser {
 		
 	}
 	
+	public List<CSVStateCensus> sortStateCensusDataAccordingToStateInAlphabeticalOrder(String csvFilePath){
+		
+		Reader reader=null;
+		try {
+			reader = Files.newBufferedReader(Paths.get(csvFilePath));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		CSVStateDataList = new CsvToBeanBuilder(reader).withType(CSVStateCensus.class).build().parse();
+		List<CSVStateCensus> sortedList = CSVStateDataList.stream()
+				.sorted((element1, element2) ->element1.state.compareTo(element2.state))
+				.collect(Collectors.toList());
+		
+		Gson gson=new Gson();
+		String json=gson.toJson(sortedList);
+		FileWriter writer;
+		
+		try {
+			writer = new FileWriter(JSON_FILE_FOR_SORTED_STATE_CENSUS_ACCORDINGTO_STATENAME);
+			writer.write(json);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sortedList;
+	}
+	
 	
 	public int loadStateCodeData(String csvFilePath) throws CensusAnalyserException{
-		List<CSVStateCode> CSVStateCodeDataList;
-		
 		if(!this.checkFileExtention(csvFilePath)) {
 			throw new CensusAnalyserException("File type is not correct",ExceptionType.FILE_TYPE_INCORRECT);
 		}
